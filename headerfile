@@ -1,1 +1,25 @@
 // header file
+
+#pragma once
+
+class Football
+{
+private:
+  static const int WIDTH = 1214;   // The width of the graphic window.
+  static const int HEIGHT = 500;  // The height of the graphic window.
+  static const int OFFSET = 32;   // The offset of the graphic window from the corner of the screen
+
+
+
+
+public:
+  void drawField(); // Function that draw the football field
+
+
+
+
+
+
+
+
+};
