@@ -1,1 +1,104 @@
 // cpp file
+
+#include "Football.h"
+#include <iostream>
+#include "../lib/graphics.h" 
+
+
+// Function draws the graphics window that makes up the football field.
+void Football::drawField()
+{
+  initwindow( WIDTH, HEIGHT, "Extreme Football", OFFSET, OFFSET );
+
+  setcolor( WHITE );    // Set the drawing color.
+  setbkcolor( GREEN );  // Set the background color.
+  cleardevice();        // Clear the window, filling it with the background color.
+
+
+
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 4 );
+  outtextxy( WIDTH / 2, HEIGHT + (HEIGHT - 100 - OFFSET), "Extreme Football" );
+
+
+  // Left Endzone
+  setlinestyle( SOLID_LINE, USERBIT_LINE, THICK_WIDTH );
+  rectangle( OFFSET, OFFSET, OFFSET + 100, HEIGHT - OFFSET );  
+
+  // Right Endzone
+  rectangle( WIDTH - OFFSET - 100, OFFSET, WIDTH - OFFSET, HEIGHT - OFFSET );
+
+  // Upper Out of Bounds
+  line( OFFSET + 100, OFFSET, WIDTH - OFFSET - 100, OFFSET );
+
+  // Lower Out of Bounds
+  line( OFFSET + 100, HEIGHT - OFFSET, WIDTH - OFFSET - 100, HEIGHT - OFFSET );
+
+  setlinestyle( SOLID_LINE, USERBIT_LINE, NORM_WIDTH );
+
+  // Left 5 yard line
+  line( OFFSET + 150, OFFSET, OFFSET + 150, HEIGHT - OFFSET );
+
+  // Left 10 yard line
+  line( OFFSET + 200, OFFSET, OFFSET + 200, HEIGHT - OFFSET );
+
+  // Left 15 yard line
+  line( OFFSET + 250, OFFSET, OFFSET + 250, HEIGHT - OFFSET );
+
+  // Left 20 yard line
+  line( OFFSET + 300, OFFSET, OFFSET + 300, HEIGHT - OFFSET );
+
+  // Left 25 yard line
+  line( OFFSET + 350, OFFSET, OFFSET + 350, HEIGHT - OFFSET );
+
+  // Left 30 yard line
+  line( OFFSET + 400, OFFSET, OFFSET + 400, HEIGHT - OFFSET );
+
+  // Left 35 yard line
+  line( OFFSET + 450, OFFSET, OFFSET + 450, HEIGHT - OFFSET );
+
+  // Left 40 yard line
+  line( OFFSET + 500, OFFSET, OFFSET + 500, HEIGHT - OFFSET );
+  
+  // Left 45 yard line
+  line( OFFSET + 550, OFFSET, OFFSET + 550, HEIGHT - OFFSET );
+
+  // 50 yard line
+  line( OFFSET + 600, OFFSET, OFFSET + 600, HEIGHT - OFFSET );
+
+  // Right 45 yard line
+  line( OFFSET + 650, OFFSET, OFFSET + 650, HEIGHT - OFFSET );
+
+  // Right 40 yard line
+  line( OFFSET + 700, OFFSET, OFFSET + 700, HEIGHT - OFFSET );
+
+  // Right 35 yard line
+  line( OFFSET + 750, OFFSET, OFFSET + 750, HEIGHT - OFFSET );
+
+  // Right 30 yard line
+  line( OFFSET + 800, OFFSET, OFFSET + 800, HEIGHT - OFFSET );
+
+  // Right 25 yard line
+  line( OFFSET + 850, OFFSET, OFFSET + 850, HEIGHT - OFFSET );
+
+  // Right 20 yard line
+  line( OFFSET + 900, OFFSET, OFFSET + 900, HEIGHT - OFFSET );
+
+  // Right 15 yard line
+  line( OFFSET + 950, OFFSET, OFFSET + 950, HEIGHT - OFFSET );
+
+  // Right 10 yard line
+  line( OFFSET + 1000, OFFSET, OFFSET + 1000, HEIGHT - OFFSET );
+
+  // Right 5 yard line
+  line( OFFSET + 1050, OFFSET, OFFSET + 1050, HEIGHT - OFFSET );
+
+
+
+ 
+  settextjustify( CENTER_TEXT, BOTTOM_TEXT );
+  settextstyle( DEFAULT_FONT, HORIZ_DIR, 0 );
+  outtextxy( WIDTH / 2, HEIGHT, "Press any key to close window..." );
+
+}
+
