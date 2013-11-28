@@ -1,0 +1,527 @@
+/* CSCI 261 Final Project Fall 2013
+ *
+ * Author: Alex Patel
+ *
+ * This program plays a game of football between a user and the computer.
+ * The user enters in a number of yards to gain in a single play, while the 
+ * computer uses a random number generator to determine the number of yards
+ * to gain in each play. The user starts with the ball on his/her own 20-yard
+ * line and must advance the ball 20 yards on four downs for a first down. If
+ * the user fails to get to a first down, the ball is turned over to the 
+ * computer. If a player reaches the end-zone for a touchdown, there team's
+ * score increments by 7. After a score, the ball is given to the opposing
+ * player. First player to 50 points wins.
+ */
+
+#include <iostream>  // "Computer, include the iostream library so I can use cin and cout."
+#include <cstdlib>   // "Computer, include the standard library so my program isn't boring."
+#include <string>    // "Computer, include the string library so I can use text longer than one character."
+#include "../lib/graphics.h"  // "Also, please include the Borland Graphics Interface so I can draw pictures."
+
+
+using namespace std;  // We will almost always use the standard namespace.
+
+ static const int WIDTH = 1264; // The width of the graphic window.
+ static const int HEIGHT = 500;  // The height of the graphic window.
+ static const int OFFSET = 32;   // The offset of the graphic window from the corner of the screen
+
+
+ 
+
+int plays();
+int compRandom( int upper, int lower );
+void drawField();
+void drawFieldLines();
+void eraseField();
+void drawBall( int currentPlayerGain );
+void eraseBall( int currentPlayerGain);
+void drawPlayerScore( int playerScore );
+void erasePlayerScore( int playerScore );
+void drawCompScore();
+int currentYardline( int yardline );
+void touchDown();
+
+int main( )
+{
+  int currentPlayerGain = 0;
+  int playerScore = 0;
+  int compScore = 0;
+  
+  
+  
+  drawField();
+
+  drawFieldLines();
+  
+  drawPlayerScore( playerScore );
+  
+  drawBall( currentPlayerGain );
+  
+  plays();
+
+  drawPlayerScore( playerScore );
+
+  
+  
+  
+  
+ 
+  
+ // eraseBall( currentPlayerGain );
+ //
+ // 
+ // 
+ // 
+ ///* Football fb = Football();*/
+ // int nLoop = 0;
+ // 
+ // for(nLoop=0; nLoop < ( 80 ); nLoop++)
+ // {
+ //   drawBall(nLoop);
+
+ //   /* 
+ //      The delay value. delay() is in milliseconds. 
+ //      Increase it to make the ball animate slower. 
+ //      Decrease it to make the ball animate faster. 
+ //   */
+ //   delay(5); 
+ //   eraseBall(nLoop);
+ // }
+
+ 
+  
+
+
+  
+  
+ 
+
+  // This line of code pauses the program until a key is pressed.
+  // In this situation, we don't care about the actual key pressed,
+  // we just want the window to stay open for us to admire.
+  char ignore = (char)getch();
+
+  // This signals the operating system that everything is ok.
+  return EXIT_SUCCESS;
+}
+
+
+/****************************************************************/
+// Draws the field that will fit into the graphics window.
+void drawField()
+{
+  initwindow( WIDTH, HEIGHT, "Extreme Football", OFFSET, OFFSET );
+
+  setcolor( WHITE );    // Set the drawing color.
+  setbkcolor( GREEN );  // Set the background color.
+  cleardevice();        // Clear the window, filling it with the background color.
+
+
+
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 4 );
+  outtextxy( WIDTH / 2, HEIGHT + (HEIGHT - 100 - OFFSET), "Extreme Football" ); 
+
+
+  settextjustify( CENTER_TEXT, BOTTOM_TEXT );
+  settextstyle( DEFAULT_FONT, HORIZ_DIR, 0 );
+  outtextxy( WIDTH / 2, HEIGHT, "Press any key to close window..." );
+}
+
+
+/****************************************************************/
+// Draws the yard-lines of the field in the graphics window.
+void drawFieldLines()
+{
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 4 );
+  setcolor( WHITE );
+
+  // Left Endzone
+  setlinestyle( SOLID_LINE, USERBIT_LINE, THICK_WIDTH );
+  rectangle( OFFSET, OFFSET, OFFSET + 100, HEIGHT - OFFSET );  
+
+  // Right Endzone
+  rectangle( WIDTH - OFFSET - 100, OFFSET, WIDTH - OFFSET, HEIGHT - OFFSET );
+
+  // Upper Out of Bounds
+  line( OFFSET + 100, OFFSET, WIDTH - OFFSET - 100, OFFSET );
+
+  // Lower Out of Bounds
+  line( OFFSET + 100, HEIGHT - OFFSET, WIDTH - OFFSET - 100, HEIGHT - OFFSET );
+
+  setlinestyle( SOLID_LINE, USERBIT_LINE, NORM_WIDTH );
+
+  // Left 5 yard line
+  line( OFFSET + 150, OFFSET, OFFSET + 150, HEIGHT - OFFSET );
+
+  // Left 10 yard line
+  line( OFFSET + 200, OFFSET, OFFSET + 200, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 200, OFFSET + 50, "<10 " );
+
+  // Left 15 yard line
+  line( OFFSET + 250, OFFSET, OFFSET + 250, HEIGHT - OFFSET );
+
+  // Left 20 yard line
+  line( OFFSET + 300, OFFSET, OFFSET + 300, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 300, OFFSET + 50, "<20 " );
+
+  // Left 25 yard line
+  line( OFFSET + 350, OFFSET, OFFSET + 350, HEIGHT - OFFSET );
+
+  // Left 30 yard line
+  line( OFFSET + 400, OFFSET, OFFSET + 400, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 400, OFFSET + 50, "<30 " );
+
+  // Left 35 yard line
+  line( OFFSET + 450, OFFSET, OFFSET + 450, HEIGHT - OFFSET );
+
+  // Left 40 yard line
+  line( OFFSET + 500, OFFSET, OFFSET + 500, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 500, OFFSET + 50, "<40 " );
+  // Left 45 yard line
+  line( OFFSET + 550, OFFSET, OFFSET + 550, HEIGHT - OFFSET );
+
+  // 50 yard line
+  line( OFFSET + 600, OFFSET, OFFSET + 600, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 600, OFFSET + 50, "50" );  
+
+  // Right 45 yard line
+  line( OFFSET + 650, OFFSET, OFFSET + 650, HEIGHT - OFFSET );
+
+  // Right 40 yard line
+  line( OFFSET + 700, OFFSET, OFFSET + 700, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 700, OFFSET + 50, " 40>" );
+
+  // Right 35 yard line
+  line( OFFSET + 750, OFFSET, OFFSET + 750, HEIGHT - OFFSET );
+
+  // Right 30 yard line
+  line( OFFSET + 800, OFFSET, OFFSET + 800, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 800, OFFSET + 50, " 30>" );
+
+  // Right 25 yard line
+  line( OFFSET + 850, OFFSET, OFFSET + 850, HEIGHT - OFFSET );
+
+  // Right 20 yard line
+  line( OFFSET + 900, OFFSET, OFFSET + 900, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 900, OFFSET + 50, " 20>" );
+
+  // Right 15 yard line
+  line( OFFSET + 950, OFFSET, OFFSET + 950, HEIGHT - OFFSET );
+
+  // Right 10 yard line
+  line( OFFSET + 1000, OFFSET, OFFSET + 1000, HEIGHT - OFFSET );
+  outtextxy( OFFSET + 1000, OFFSET + 50, " 10>" );
+
+  // Right 5 yard line
+  line( OFFSET + 1050, OFFSET, OFFSET + 1050, HEIGHT - OFFSET );
+
+  // Mid-Field image
+  readimagefile( "NFL.gif", OFFSET + 500, (HEIGHT / 2) - 100, OFFSET + 700, (HEIGHT / 2) + 100  );
+}
+
+
+/****************************************************************/
+// Draws the ball in the position of the current Player.
+void drawBall( int currentGain )
+{
+  int currentPlayerGain = currentGain * 1;
+  
+  int x = (OFFSET + 900) - currentPlayerGain;
+  int y = (HEIGHT / 2);
+  int rX = 80;
+  int rY = 50;
+  setcolor( GREEN );
+  setfillstyle( SOLID_FILL, BROWN );
+  fillellipse( x, y, rX, rY );
+
+  setcolor( BLACK );
+
+  int xI = ( OFFSET + 860 ) - currentPlayerGain;
+  int yI = (HEIGHT / 2);
+  int xF = xI;
+  int yF = yI;
+
+  // Horizontal Lace on Ball
+  line( xI, yI, xF + 80, yF );
+
+  // Vertical Laces on the Ball, starting from the left
+
+  for( int i = 0; i < 5; i++ )
+  {
+    line( xI + (20*i) , yI + 5, xF + (20*i) , yF - 5 );
+  }
+}
+
+/**********************************************************/
+// Erases the ball as it is moved to a new location.
+
+void eraseField( int currentGain )
+{
+  setcolor( GREEN ); // the background color.
+
+  int currentPlayerGain = currentGain * 10;
+  int x = OFFSET + 900 + currentPlayerGain;
+  int y = (HEIGHT / 2);
+  int rX = 80;
+  int rY = 50;
+  setcolor( GREEN );
+  setfillstyle( SOLID_FILL, GREEN );
+  fillellipse( x, y, rX, rY );
+
+  setcolor( GREEN );
+
+  int xI = OFFSET + 860 + currentPlayerGain;
+  int yI = (HEIGHT / 2);
+  int xF = xI;
+  int yF = yI;
+
+  // Horizontal Lace on Ball
+  line( xI, yI, xF + 80, yF );
+
+  // Vertical Laces on the Ball, starting from the left
+
+  for( int i = 0; i < 5; i++ )
+  {
+    line( xI + (20*i) , yI + 5, xF + (20*i) , yF - 5 );
+  }
+}
+
+
+/*********************************************************************/
+// Random number generator for the computer player.
+int compRandom( int upper, int lower )
+{
+  int sum = 0;
+  for( int i = 0; i < 10; i++ )
+  {
+    int compRandom = rand() % (upper-lower) + upper;
+    sum += compRandom;
+  }
+  return (sum / 10);
+}
+
+/*********************************************************************/
+// Determines the current player of the game.
+int currentPlayer( int currentPlayerGain, int playerGain, int compGain )
+{
+  if( currentPlayerGain == playerGain )
+  {
+    return playerGain;
+  }
+  else
+  {
+    return compGain;
+  }
+}
+
+/**********************************************************************/
+// Determines the current yard-line of the ball.
+//int currentYardline( int currentPos );
+
+
+void touchdown ()
+{
+  const int MAX_MESSAGE_LENGTH = 80;
+  char message[ MAX_MESSAGE_LENGTH ];
+  sprintf_s( message, MAX_MESSAGE_LENGTH, "Touch-Down!!!" );
+  setcolor( WHITE );
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 10 );
+  outtextxy( WIDTH / 2, 430, message );
+}
+
+
+
+/**********************************************************************/
+// Determines which play the current player is on.
+
+int sum = 0, currentPlayerGain = 0;
+int playerScore = 0, compScore = 0;
+int yardline = 20;
+int plays()
+{
+
+ 
+  while( ( yardline < 90 ) && ( yardline >! 100 ) )
+  {
+      for( int i = 0; i < 5; i++ )
+      {        
+        
+        if( i == 0 ) // First Down
+        { 
+          
+          cout << "1st down! 20 yards to go" << endl << endl;
+          cout << "Current Yard-line: " << yardline << endl << endl;
+          cout << "How many yards do you want to gain on this play? " ;
+          cin >> currentPlayerGain;
+          cout << endl << endl;   
+          yardline += currentPlayerGain;
+          sum += currentPlayerGain;
+
+          if( ( sum >= 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+          {
+            sum = 0;
+            plays();
+          }
+          else if( yardline >= 100 ) // If the player passes the goal line.
+          {
+            sum = 0;
+            cout << "Touch-Down!!!" << endl;
+            touchdown();
+            erasePlayerScore( playerScore );
+            playerScore += 7;
+            drawPlayerScore( playerScore );
+            
+            goto finish; // Exits to the end of the function.
+          }
+        }
+
+        if( i == 1 ) // Second Down
+        {
+          if( ( sum >= 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+          {
+            sum = 0;
+            cout << "Touch-Down!!!" << endl;
+            touchdown();
+            erasePlayerScore( playerScore );
+            playerScore += 7;
+            drawPlayerScore( playerScore ); 
+            
+            goto finish; // Exits to the end of the function.
+          }
+          else
+          {
+            cout << i + 1 << "nd down, " << 20 - sum << " yards to go" << endl << endl;
+            cout << "Current Yard-line: " << yardline << endl << endl;
+            cout << "How many yards do you want to gain on this play? " ;
+            cin >> currentPlayerGain;
+            cout << endl << endl;
+            sum += currentPlayerGain;
+            yardline += currentPlayerGain;
+          }
+        }
+        else if( i == 2 ) // Third Down
+        {
+          if( ( sum >= 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+          {
+            sum = 0;
+            plays();
+          }
+          else if( yardline >= 100 ) // If the player passes the goal line.
+          {
+            sum = 0;
+            cout << "Touch-Down!!!" << endl;
+            touchdown();
+            erasePlayerScore( playerScore );
+            playerScore += 7;
+            drawPlayerScore( playerScore ); 
+            
+            goto finish; // Exits to the end of the function.
+          }
+          else
+          {
+            
+            cout << i + 1 << "rd down, " << 20 - sum << " yards to go" << endl << endl;
+            cout << "Current Yard-line: " << yardline << endl << endl;
+            cout << "How many yards do you want to gain on this play? " ;
+            cin >> currentPlayerGain;
+            cout << endl << endl;
+            sum += currentPlayerGain;
+            yardline += currentPlayerGain;
+          }
+        }
+        else if( i == 3 ) // Fourth Down
+        {
+          if( ( sum >= 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+          {
+            sum = 0;
+            plays();
+          }
+          else if( yardline >= 100 ) // If the player passes the goal line.
+          {
+            sum = 0;
+            cout << "Touch-Down!!!" << endl;
+            touchdown();
+            erasePlayerScore( playerScore );
+            playerScore += 7;
+            drawPlayerScore( playerScore ); 
+            
+            goto finish; // Exits to the end of the function.
+          }
+          else
+          {
+            
+            cout << i + 1 << "th down, " << 20 - sum << " yards to go" << endl << endl;
+            cout << "Current Yard-line: " << yardline << endl << endl;
+            cout << "How many yards do you want to gain on this play? " ;
+            cin >> currentPlayerGain;
+            cout << endl << endl;
+            sum += currentPlayerGain;
+            yardline += currentPlayerGain;
+          }
+
+        }     
+        else if( i == 4 ) // Turn-over 
+        {
+          if( yardline >= 100 ) // If the player passes the goal line.
+          {
+            cout << "Touch-Down!!!" << endl;
+            touchdown();
+            erasePlayerScore( playerScore );
+            playerScore += 7;
+            drawPlayerScore( playerScore ); 
+            
+            goto finish; // Exits to the end of the function.
+          }
+          else if( sum >= 20 )
+          {
+            plays();
+          }
+          else
+          {
+          
+            cout << "Turn-over on downs!" << endl;
+            cout << "Current Yard-line: " << yardline << endl << endl;
+          
+            goto finish; // Exits to the end of the function.
+            
+            //currentPlayer = compPlayer;
+          }
+        }
+      }
+  }
+
+  finish:
+    
+  return currentPlayerGain;
+  // return true.
+  
+}
+
+/*****************************************************************/
+// Draws the current score of the game in the graphics window
+void drawPlayerScore( int playerScore )
+{
+  
+  const int MAX_MESSAGE_LENGTH = 80;
+  char message[ MAX_MESSAGE_LENGTH ];
+  sprintf_s( message, MAX_MESSAGE_LENGTH, "Player Score: %d", playerScore );
+  setcolor( WHITE );
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 2 );
+  outtextxy( 100, 20, message );
+}
+
+void erasePlayerScore( int playerScore )
+{
+  const int MAX_MESSAGE_LENGTH = 80;
+  char message[ MAX_MESSAGE_LENGTH ];
+  sprintf_s( message, MAX_MESSAGE_LENGTH, "Player Score: %d", playerScore );
+  setcolor( GREEN ); // Same as background color;
+  settextjustify( CENTER_TEXT, CENTER_TEXT );
+  settextstyle( BOLD_FONT, HORIZ_DIR, 2 );
+  outtextxy( 100, 20, message ); 
+}
+
