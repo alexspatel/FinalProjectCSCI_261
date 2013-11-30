@@ -1,0 +1,148 @@
+int sum = 0, currentPlayerGain = 0;
+int playerScore = 0;
+int yardline = 20;
+int plays()
+{
+
+ 
+  while( yardline < 100 )
+  {
+    
+    delay( 2000 );
+      for( int i = 0; i < 5; i++ )
+      {   
+        while( playerScore < 50 )
+        {
+        
+          if( i == 0 ) // First Down
+          { 
+          
+            cout << "1st down! 20 yards to go" << endl << endl;
+            cout << "Current Yard-line: " << yardline << endl << endl;
+            cout << "How many yards do you want to gain on this play? " ;
+            cin >> currentPlayerGain;
+            cout << endl << endl;
+            
+            yardline += currentPlayerGain;
+            sum += currentPlayerGain;   
+            eraseField( yardline );         
+            drawBall( yardline );
+
+            if( ( sum > 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+            {
+              sum = 0;
+              plays();
+            }
+            else if( yardline >= 100 ) // If the player passes the goal line.
+            {
+              goto finish; // Exits to the end of the function.
+            }
+            
+
+          }
+
+          if( i == 1 ) // Second Down
+          {
+            if( ( sum > 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+            {
+              goto finish; // Exits to the end of the function.
+            }
+            else
+            {
+              cout << i + 1 << "nd down, " << 20 - sum << " yards to go" << endl << endl;
+              cout << "Current Yard-line: " << yardline << endl << endl;
+              cout << "How many yards do you want to gain on this play? " ;
+              cin >> currentPlayerGain;
+              cout << endl << endl;
+              sum += currentPlayerGain;
+              yardline += currentPlayerGain;
+            }
+          }
+          else if( i == 2 ) // Third Down
+          {
+            if( ( sum > 20 ) && ( yardline <= 100 ) ) // If the player advances for a firstdown.
+            {
+              sum = 0;
+              plays();
+            }
+            else if( yardline >= 100 ) // If the player passes the goal line.
+            {
+              goto finish; // Exits to the end of the function.
+            }
+            else
+            {
+            
+              cout << i + 1 << "rd down, " << 20 - sum << " yards to go" << endl << endl;
+              cout << "Current Yard-line: " << yardline << endl << endl;
+              cout << "How many yards do you want to gain on this play? " ;
+              cin >> currentPlayerGain;
+              cout << endl << endl;
+              eraseField( yardline );
+              yardline += currentPlayerGain;
+              sum += currentPlayerGain;            
+              drawBall( yardline );
+            }
+          }
+          else if( i == 3 ) // Fourth Down
+          {
+            if( ( sum > 20 ) && ( yardline < 100 ) ) // If the player advances for a firstdown.
+            {
+              sum = 0;
+              plays();
+            }
+            else if( yardline >= 100 ) // If the player passes the goal line.
+            {
+              goto finish; // Exits to the end of the function.
+            }
+            else
+            {
+            
+              cout << i + 1 << "th down, " << 20 - sum << " yards to go" << endl << endl;
+              cout << "Current Yard-line: " << yardline << endl << endl;
+              cout << "How many yards do you want to gain on this play? " ;
+              cin >> currentPlayerGain;
+              cout << endl << endl;
+              eraseField( yardline );
+              yardline += currentPlayerGain;
+              sum += currentPlayerGain;            
+              drawBall( yardline );
+            }
+
+          }     
+          else if( i == 4 ) // Turn-over 
+          {
+            if( yardline > 100 ) // If the player passes the goal line.
+            {                
+              goto finish; // Exits to the end of the function.
+            }
+            else if( sum > 20 )
+            {
+              plays();
+            }
+            else
+            {
+          
+              cout << "Turn-over on downs!" << endl;
+              cout << "Current Yard-line: " << yardline << endl << endl;       
+                        
+             // compPlays();
+            }
+          }
+        }
+      finish:    
+      sum = 0;
+      yardline = 0;
+      cout << "Touch-Down!!!" << endl;
+      touchdown();
+      erasePlayerScore( playerScore );
+      playerScore += 7;
+      drawPlayerScore( playerScore );
+      cout << endl << "The Computer's turn" << endl << endl;
+      delay( 5000 );
+      //compPlays();
+      return currentPlayerGain;  
+      }
+
+    }  
+    
+ }
