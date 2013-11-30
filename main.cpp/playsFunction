@@ -30,7 +30,7 @@ int plays()
           }
           else if( yardline >= 100 ) // If the player passes the goal line.
           {
-            sum = 0;
+            sum = 0; 
             cout << "Touch-Down!!!" << endl;
             touchdown();
             erasePlayerScore( playerScore );
